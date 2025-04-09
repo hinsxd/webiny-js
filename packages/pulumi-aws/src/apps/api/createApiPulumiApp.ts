@@ -1,5 +1,10 @@
 import * as aws from "@pulumi/aws";
-import { createPulumiApp, PulumiAppParam, PulumiAppParamCallback } from "@webiny/pulumi";
+import {
+    createPulumiApp,
+    type PulumiApp,
+    PulumiAppParam,
+    PulumiAppParamCallback
+} from "@webiny/pulumi";
 import {
     ApiApwScheduler,
     ApiBackgroundTask,
@@ -27,6 +32,7 @@ import { getEnvVariableWebinyEnv } from "~/env/env";
 import { getEnvVariableWebinyProjectName } from "~/env/projectName";
 import { getEnvVariableAwsRegion } from "~/env/awsRegion";
 import { attachSyncSystem } from "../syncSystem/api/index.js";
+import type { WithServiceManifest } from "~/utils/withServiceManifest.js";
 
 export type ApiPulumiApp = ReturnType<typeof createApiPulumiApp>;
 
@@ -88,7 +94,7 @@ export const createApiPulumiApp = (projectAppParams: CreateApiPulumiAppParams = 
         name: "api",
         path: "apps/api",
         config: projectAppParams,
-        program: async app => {
+        program: async (app: PulumiApp & WithServiceManifest) => {
             let searchEngineParams:
                 | CreateCorePulumiAppParams["openSearch"]
                 | CreateCorePulumiAppParams["elasticSearch"]
